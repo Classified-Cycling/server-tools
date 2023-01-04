@@ -3,6 +3,7 @@
 
 import copy
 
+import odoo.models
 from odoo import _, api, fields, models, modules
 from odoo.exceptions import UserError
 
@@ -18,6 +19,15 @@ FIELDS_BLACKLIST = [
 # Used for performance, to avoid a dictionary instanciation when we need an
 # empty dict to simplify algorithms
 EMPTY_DICT = {}
+
+
+def model__deepcopy__(self, memo=None):
+    if memo is None:
+        memo = {}
+    return self.browse(self.ids)
+
+
+models.BaseModel.__deepcopy__ = model__deepcopy__
 
 
 class DictDiffer(object):
